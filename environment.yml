@@ -54,7 +54,7 @@ dependencies:
   - expat=2.6.2=h59595ed_0
   - fiona=1.9.6=py312h66d9856_0
   - fmt=10.2.1=h00ab1b0_0
-  - folium=0.16.0=pyhd8ed1ab_0
+  - folium=0.16.0
   - font-ttf-dejavu-sans-mono=2.37=hab24e00_0
   - font-ttf-inconsolata=3.000=h77eed37_0
   - font-ttf-source-code-pro=2.038=h77eed37_0
