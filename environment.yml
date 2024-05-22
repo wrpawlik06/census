@@ -1,8 +1,0 @@
-name: census
-channels:
-  - conda-forge
-  - defaults
-dependencies:
-  - folium=0.16.0
-  - gdown==2.3.1
-`
