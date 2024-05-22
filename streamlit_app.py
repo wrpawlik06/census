@@ -214,3 +214,12 @@ if st.button("Run Analysis"):
     update_progress(100, "Rendering map...")
 
     folium_static(map)
+
+if st.button("Export Filtered Data"):
+    csv = df.to_csv(index=False)
+    st.download_button(
+        label="Download CSV",
+        data=csv,
+        file_name='filtered_msoa_data.csv',
+        mime='text/csv',
+    )
