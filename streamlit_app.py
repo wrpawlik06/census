@@ -15,10 +15,9 @@ from streamlit_folium import folium_static
 DEFAULT_MEDIAN_PRICE_THRESHOLD = 350000
 DEFAULT_CHILDREN_PERCENTAGE_THRESHOLD = 0.22
 DEFAULT_POPULATION_DENSITY_THRESHOLD = 2000
-#DEFAULT_TOP_AGE = 16
+DEFAULT_TOP_AGE = 16
 
 # Streamlit UI
-st.title("🗺Find your Market")
 
 median_price_threshold = st.slider("Median Price Threshold", 100000, 1000000, DEFAULT_MEDIAN_PRICE_THRESHOLD, 50000)
 children_percentage_threshold = st.slider("Children Percentage Threshold", 0.0, 1.0, DEFAULT_CHILDREN_PERCENTAGE_THRESHOLD, 0.01)
@@ -73,7 +72,7 @@ if st.button("Run Analysis"):
         print("Finished Unzipping!")
 
     def make_list_to_keep() -> list:
-        files = ["streamlit_app.py"]
+        files = ["streamlit_app.py", "requirements.txt"]
         for filename in os.listdir():
             if "msoa" in filename.lower() and "zip" not in filename.lower():
                 files.append(filename)
