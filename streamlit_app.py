@@ -22,7 +22,6 @@ DEFAULT_TOP_AGE = 16
 median_price_threshold = st.slider("Median Price Threshold", 100000, 1000000, DEFAULT_MEDIAN_PRICE_THRESHOLD, 50000)
 children_percentage_threshold = st.slider("Children Percentage Threshold", 0.0, 1.0, DEFAULT_CHILDREN_PERCENTAGE_THRESHOLD, 0.01)
 population_density_threshold = st.slider("Population Density Threshold", 100, 10000, DEFAULT_POPULATION_DENSITY_THRESHOLD, 100)
-#top_age = st.slider("Top Age for Child Percentage Calculation", 0, 20, DEFAULT_TOP_AGE, 1)
 
 if st.button("Run Analysis"):
     progress_bar = st.empty()  # Define the progress bar placeholder here after the button
@@ -143,9 +142,9 @@ if st.button("Run Analysis"):
         print(f"Cleaned: {list(cleaned_dataframes.keys())}")
         return cleaned_dataframes
 
-    def clean_age_ts007(df: pd.DataFrame, top_age: int, percentages: bool) -> pd.DataFrame:
+    def clean_age_ts007(df: pd.DataFrame, DEFAULT_TOP_AGE: int, percentages: bool) -> pd.DataFrame:
         amount_meta_columns = 4
-        max_col_index = amount_meta_columns + top_age + 1
+        max_col_index = amount_meta_columns + DEFAULT_TOP_AGE + 1
         df.columns = df.columns.str.replace('Age: ', '').str.replace('; measures: Value', '')
         df.rename(columns={"Aged under 1 year": "Aged 0 years"}, inplace=True)
         df.rename(columns={"geography code": "MSOA code"}, inplace=True)
@@ -177,7 +176,7 @@ if st.button("Run Analysis"):
     dataframes = build_dataframes(file_tags_to_descriptions.keys())
     
     cleaning_functions = {
-        "ts007": lambda df: clean_age_ts007(df, top_age=top_age, percentages=True),
+        "ts007": lambda df: clean_age_ts007(df, DEFAULT_TOP_AGE=DEFAULT_TOP_AGE, percentages=True),
         "ts006": clean_population_density_ts006,
         "HPSSA": lambda df: clean_HPSSA(df, month_years=["Mar 2023"])
     }
