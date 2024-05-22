@@ -50,17 +50,31 @@ if st.button("Run Analysis"):
         return links
 
     def download_link(link):
+        """
+        Downloads a file from the specified URL using the requests library.
+
+        Args:
+            link (str): The URL from which the file will be downloaded.
+        """
         filename = link.split('/')[-1]
+        print(f"Downloading {filename} from {link}")
+
+        # Use gdown for Google Drive links
         if "drive.google" in link:
-            gdown.download(link, filename, quiet=True)
+            gdown.download(link, filename, quiet=False)
         else:
             response = requests.get(link, stream=True)
             if response.status_code == 200:
                 with open(filename, 'wb') as file:
                     for chunk in response.iter_content(chunk_size=8192):
                         file.write(chunk)
+                print(f"Downloaded {filename}")
             else:
-                print(f"Failed to download {link}")
+                print(f"Failed to download {link} with status code {response.status_code}")
+
+        # Verify the file is in the current directory
+        if not os.path.exists(filename):
+            print(f"Error: {filename} was not found in the current directory after download.")
 
     def download_all_links():
         links = build_ts_links()
@@ -82,7 +96,7 @@ if st.button("Run Analysis"):
     def make_list_to_keep() -> list:
         files = ["streamlit_app.py", "requirements.txt"]
         for filename in os.listdir():
-            if "msoa" in filename.lower() and "zip" not in filename.lower():
+            if ("msoa" in filename.lower() and "zip" not in filename.lower()) or "MSOA_2021_EW_BFC_V6" in filename.lower():
                 files.append(filename)
                 files.sort()
         return files
@@ -176,11 +190,11 @@ if st.button("Run Analysis"):
 
     # Run the pipeline
     update_progress(10, "Starting downloads...")
-    download_all_links()
+    #download_all_links()
     update_progress(30, "Extracting files...")
     extract_zip()
     update_progress(50, "Cleaning directory...")
-    clean_directory(directory=os.getcwd(), files_to_keep=make_list_to_keep())
+    #clean_directory(directory=os.getcwd(), files_to_keep=make_list_to_keep())
     update_progress(60, "Building dataframes...")
     dataframes = build_dataframes(file_tags_to_descriptions.keys())
     
@@ -207,7 +221,9 @@ if st.button("Run Analysis"):
     print(f"Number of MSOAs after filtering: {len(df)}")
 
     update_progress(90, "Loading shapefiles and plotting map...")
+
     gpd_msoa = gpd.read_file("MSOA_2021_EW_BFC_V6.shp")
+    
     gpd_msoa = gpd_msoa[gpd_msoa['MSOA21CD'].isin(df['MSOA code'])]
     gpd_msoa = gpd_msoa.to_crs(epsg=4326)
     
