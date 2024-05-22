@@ -10,6 +10,7 @@ from natsort import natsorted
 import geopandas as gpd
 import folium
 from streamlit_folium import folium_static
+import requests
 
 # Constants
 DEFAULT_MEDIAN_PRICE_THRESHOLD = 350000
@@ -49,10 +50,17 @@ if st.button("Run Analysis"):
         return links
 
     def download_link(link):
+        filename = link.split('/')[-1]
         if "drive.google" in link:
-            gdown.download(link, quiet=True)
+            gdown.download(link, filename, quiet=True)
         else:
-            subprocess.run(["wget", link], stdout=subprocess.DEVNULL)
+            response = requests.get(link, stream=True)
+            if response.status_code == 200:
+                with open(filename, 'wb') as file:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        file.write(chunk)
+            else:
+                print(f"Failed to download {link}")
 
     def download_all_links():
         links = build_ts_links()
