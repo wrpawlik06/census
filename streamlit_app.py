@@ -18,12 +18,15 @@ DEFAULT_CHILDREN_PERCENTAGE_THRESHOLD = 0.22
 DEFAULT_POPULATION_DENSITY_THRESHOLD = 2000
 DEFAULT_TOP_AGE = 16
 
+# Global variable
+df_result = pd.DataFrame()
 # Streamlit UI
 st.title("🗺 Find your Market")
 
 median_price_threshold = st.slider("Median Price Threshold", 100000, 1000000, DEFAULT_MEDIAN_PRICE_THRESHOLD, 50000)
 children_percentage_threshold = st.slider("Children Percentage Threshold", 0.0, 1.0, DEFAULT_CHILDREN_PERCENTAGE_THRESHOLD, 0.01)
 population_density_threshold = st.slider("Population Density Threshold", 100, 10000, DEFAULT_POPULATION_DENSITY_THRESHOLD, 100)
+
 
 if st.button("Run Analysis"):
     progress_bar = st.empty()  # Define the progress bar placeholder here after the button
@@ -218,6 +221,9 @@ if st.button("Run Analysis"):
     )
     
     df = df.query(query_string)
+
+    # Copying query results to a global variable
+    df_result = df
     print(f"Number of MSOAs after filtering: {len(df)}")
 
     update_progress(90, "Loading shapefiles and plotting map...")
@@ -239,11 +245,10 @@ if st.button("Run Analysis"):
 
     folium_static(map)
 
-if st.button("Export Filtered Data"):
-    csv = df.to_csv(index=False)
-    st.download_button(
-        label="Download CSV",
-        data=csv,
-        file_name='filtered_msoa_data.csv',
-        mime='text/csv',
-    )
+
+st.download_button(
+    label="Download Filtered Data",
+    data=df_result.to_csv(index=False),
+    file_name='filtered_data.csv',
+    mime='text/csv'
+)
