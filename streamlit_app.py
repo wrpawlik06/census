@@ -245,6 +245,10 @@ if st.button("Run Analysis"):
 
     folium_static(map)
 
+# Only show table if dataframe has some data
+if len(df_result)>0:
+    df_result = df_result[natsorted(df.columns, reverse=True)]
+    st.dataframe(df_result)  # Same as st.write(df)
 
 st.download_button(
     label="Download Filtered Data",
