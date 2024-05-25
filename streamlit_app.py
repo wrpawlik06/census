@@ -1,10 +1,9 @@
 import streamlit as st
-
+from streamlit_folium import st_folium
 import folium
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
-from streamlit_folium import st_folium
 from components.sliders import ranges_from_sliders
 from components.text import title_header, criteria_matches
 from utils.processing import load_data, create_query_strings_from, apply_filters
@@ -72,22 +71,25 @@ st.dataframe(df_filtered)
 
 # Creating a map
 
-if st.button("Plot Map"):
-    
-# Create a folium map centered around the average location
-    map_center = [df['LAT'].mean(), df['LONG'].mean()]
-    m = folium.Map(location=map_center, zoom_start=12)
 
-    # Add markers for each centroid
-    for idx, row in df.iterrows():
+# Function to create Folium map
+def create_folium_map(dataframe):
+    map_center = [dataframe['LAT'].mean(), dataframe['LONG'].mean()]
+    m = folium.Map(location=map_center, zoom_start=6)
+    
+    for idx, row in dataframe.iterrows():
         folium.Marker(
             location=[row['LAT'], row['LONG']],
             popup=f"{row['MSOA21NM']}<br>Median Value: £{row['Median Value']}<br>Population: {row['Population']}",
-            tooltip=row['MSOA code']
+            tooltip=row['MSOA21NM']
         ).add_to(m)
-
-    st_folium(m)
-
+    
+    return m
+if len(df_filtered) > 0:
+    m = create_folium_map(df_filtered)
+    st_folium(m, width=700, height=500)
+else:
+    st.write("No data to map 😭!")
 
 #filtered facts
 # MSOAs
