@@ -30,17 +30,17 @@ def load_data():
 
 #Filter dataframe based on slicers
 def create_query_strings_from(ranges):
-    pop_density_query = (f"`Pop Density (ppl/sq km)` >= {ranges["population_density_range"][0]} & "
-                f"`Pop Density (ppl/sq km)` <= {ranges["population_density_range"][1]}")
+    pop_density_query = (f"`Pop Density (ppl/sq km)` >= {ranges['population_density_range'][0]} & "
+                f"`Pop Density (ppl/sq km)` <= {ranges['population_density_range'][1]}")
 
-    children_16_query = (f"`% Aged 0 to 16` >= {ranges["children_16_percentage_range"][0]} & "
-                    f"`% Aged 0 to 16` <= {ranges["children_16_percentage_range"][1]}")
+    children_16_query = (f"`% Aged 0 to 16` >= {ranges['children_16_percentage_range'][0]} & "
+                    f"`% Aged 0 to 16` <= {ranges['children_16_percentage_range'][1]}")
     
-    children_4_query = (f"`% Aged 0 to 4` >= {ranges["children_4_percentage_range"][0]} & "
-                f"`% Aged 0 to 16` <= {ranges["children_4_percentage_range"][1]}")
+    children_4_query = (f"`% Aged 0 to 4` >= {ranges['children_4_percentage_range'][0]} & "
+                f"`% Aged 0 to 16` <= {ranges['children_4_percentage_range'][1]}")
     
-    property_query = (f"`Median Value` >= {ranges["median_price_range"][0]} & "
-                    f"`Median Value` <= {ranges["median_price_range"][1]}")
+    property_query = (f"`Median Value` >= {ranges['median_price_range'][0]} & "
+                    f"`Median Value` <= {ranges['median_price_range'][1]}")
     add = " & "
     combined_query = (pop_density_query + 
                       add + children_16_query +
