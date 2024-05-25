@@ -1,32 +1,16 @@
 import pandas as pd
-import geopandas as gpd
 import streamlit as st
 
 # Function to load data with caching
 @st.cache_data
 def load_data():
-    
-    # Loading data from file.
-    gdf = gpd.read_file("data.gpkg")
-    gdf["geometry"] = gdf["geometry"].simplify(tolerance=0.001)
-
-    # Converting to a crs system compatible with folium.
-    gdf = gdf.to_crs(epsg=4326)
-
-    # Creating a lightweight companion dataframe for manipulation
-    df = pd.DataFrame(gdf.drop(columns=['geometry', "LONG", "LAT", "GlobalID", "BNG_N", "BNG_E"]))
-
-    df.rename(columns={"Year ending Mar 2023":"Median Value",
-                       "Total":"Population",
-                       "Population Density: Persons per square kilometre":"Pop Density (ppl/sq km)"}
-                       ,inplace=True)
-    # Specifing interesting columns
-    print(df.columns)
-    i_cols = ["MSOA code","MSOA21NM", "Median Value", "Population", "% Aged 0 to 4", "% Aged 0 to 16", "Pop Density (ppl/sq km)"]
-    df = df[i_cols]
-    print(df.columns)
-
-    return gdf, df
+    # Reading a lightweight  dataframe for manipulation
+    df = pd.read_csv("data.csv")
+    df["% Aged 0 to 16"] = df["% Aged 0 to 16"].round(2)
+    df["% Aged 0 to 4"] = df["% Aged 0 to 4"].round(2)
+    df["Pop Density (ppl/sq km)"]= df['Pop Density (ppl/sq km)'].round(0)
+    df.drop(columns='Unnamed: 0',inplace=True)
+    return df
 
 #Filter dataframe based on slicers
 def create_query_strings_from(ranges):

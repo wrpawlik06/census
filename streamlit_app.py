@@ -21,13 +21,13 @@ st.set_page_config(
 if 'data_loaded' not in st.session_state:
     st.session_state.data_loaded = False
     st.session_state.df = None
-    st.session_state.gdf = None
+    #st.session_state.gdf = None
 
 # Displaying title
 title_header()
 
 # Initialize variables
-gdf = None
+#gdf = None
 df = None
 
 #to do - put caching in processing.py
@@ -36,22 +36,22 @@ def read_decision(data_loaded):
     """Deciding whether to read from the cache or the file"""
     if not data_loaded:
         with st.spinner('Loading awesome data & sliders ⏳...'):
-            gdf, df = load_data()
-            geo_json = gdf.to_json()
+            df = load_data()
+            #geo_json = gdf.to_json()
             st.session_state.df = df
-            st.session_state.gdf = gdf
-            st.session_state.geo_json = geo_json
+            #st.session_state.gdf = gdf
+            #st.session_state.geo_json = geo_json
             data_loaded = True
-            return data_loaded, df, gdf, geo_json
+            return data_loaded, df#, gdf, geo_json
     # If data is already cached, use it!
     else:
         df =  st.session_state.df
-        gdf = st.session_state.gdf
-        geo_json = st.session_state.geo_json
-        return data_loaded, df, gdf, geo_json
+        #gdf = st.session_state.gdf
+        #geo_json = st.session_state.geo_json
+        return data_loaded, df#, gdf, geo_json
 
 # Deciding to load data from file or from session state if it exists.
-st.session_state.data_loaded, df, gdf, geo_json = read_decision(st.session_state.data_loaded)
+st.session_state.data_loaded, df = read_decision(st.session_state.data_loaded)
 
 # Getting ranges from slicers
 ranges = ranges_from_sliders()
@@ -73,16 +73,20 @@ st.dataframe(df_filtered)
 # Creating a map
 
 if st.button("Plot Map"):
-    filtered_gdf = gdf[gdf['MSOA code'].isin(df['MSOA code'])]
+    
+# Create a folium map centered around the average location
+    map_center = [df['LAT'].mean(), df['LONG'].mean()]
+    m = folium.Map(location=map_center, zoom_start=12)
 
-    latitude, longitude = 51.5074, -0.1278  # Example coordinates for London
-    map = folium.Map(location=[latitude, longitude], zoom_start=12)
-    folium.GeoJson(
-        data=filtered_gdf.to_json(),
-        style_function=lambda x: {"fillColor": "orange"}
-    ).add_to(map)
+    # Add markers for each centroid
+    for idx, row in df.iterrows():
+        folium.Marker(
+            location=[row['LAT'], row['LONG']],
+            popup=f"{row['MSOA21NM']}<br>Median Value: £{row['Median Value']}<br>Population: {row['Population']}",
+            tooltip=row['MSOA code']
+        ).add_to(m)
 
-    st_folium(map)
+    st_folium(m)
 
 
 #filtered facts
