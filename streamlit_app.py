@@ -1,13 +1,15 @@
 import streamlit as st
 from streamlit_folium import st_folium
 import folium
+import random
 import pandas as pd
 import geopandas as gpd
 import matplotlib.pyplot as plt
+from components.map import plot_points
 from components.sliders import ranges_from_sliders
-from components.text import title_header, criteria_matches
+from components.text import title_header, criteria_matches, map_header
 from utils.processing import load_data, create_query_strings_from, apply_filters
-
+from utils.find_clusters import find_clusters, get_random_colour, assign_colours
 # Set the page configuration
 st.set_page_config(
     page_title="Find Your Market",  # Title that appears on the browser tab
@@ -62,31 +64,24 @@ query_strings = create_query_strings_from(ranges)
 # Applying filters to get a dataframe and counts of matches
 df_filtered, matches  = apply_filters(df,query_strings)
 
+# Finding clusters for selected MSOAS
+df_filtered['cluster'] = find_clusters(df_filtered)
+
+
+
 # Displaying a text element
 criteria_matches(df, df_filtered, matches)
 
 # Displaying an interactive dataframe
-
 st.dataframe(df_filtered)
 
-# Creating a map
-
-
-# Function to create Folium map
-def create_folium_map(dataframe):
-    map_center = [dataframe['LAT'].mean(), dataframe['LONG'].mean()]
-    m = folium.Map(location=map_center, zoom_start=6)
-    
-    for idx, row in dataframe.iterrows():
-        folium.Marker(
-            location=[row['LAT'], row['LONG']],
-            popup=f"{row['MSOA21NM']}<br>Median Value: £{row['Median Value']}<br>Population: {row['Population']}",
-            tooltip=row['MSOA21NM']
-        ).add_to(m)
-    
-    return m
+# Displaying a map
+map_header()
 if len(df_filtered) > 0:
-    m = create_folium_map(df_filtered)
+    # Colouring clusters
+    cluster_colours = assign_colours(df_filtered)
+    # Plotting points and colouring them
+    m = plot_points(df_filtered,cluster_colours) 
     st_folium(m, width=700, height=500)
 else:
     st.write("No data to map 😭!")
