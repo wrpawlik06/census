@@ -68,7 +68,6 @@ df_filtered, matches  = apply_filters(df,query_strings)
 df_filtered['cluster'] = find_clusters(df_filtered)
 
 
-
 # Displaying a text element
 criteria_matches(df, df_filtered, matches)
 
