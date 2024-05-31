@@ -6,3 +6,6 @@ folium
 streamlit-folium
 numpy
 matplotlib
+python-dotenv
+sqlalchemy
+psycopg2
