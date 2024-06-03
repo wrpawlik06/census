@@ -34,7 +34,7 @@ def map_to_ss():
     for _, row in gdff.iterrows():
         tooltip_text = (
             f"MSOA Code: {row['MSOA code']}<br>"
-            f"MSOA Name: {row['MSOA2021NM']}<br>"
+            #f"MSOA Name: {row['MSOA2021NM']}<br>"
 
             #f"Population: {row['Population']}<br>"
             #f"Median Value: {row['Median Value']}<br>"
