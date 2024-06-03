@@ -11,8 +11,8 @@ def df_to_ss():
     in the Streamlit session state under the key 'df'.
     """
     df = pd.read_csv("data.csv")
-    df["% Aged 0 to 16"] = df["% Aged 0 to 16"].round(2)
-    df["% Aged 0 to 4"] = df["% Aged 0 to 4"].round(2)
+    df["% Aged 0 to 16"] = df["% Aged 0 to 16"].round(2)*100
+    df["% Aged 0 to 4"] = df["% Aged 0 to 4"].round(2)*100  
     df["Pop Density (ppl/sq km)"] = df['Pop Density (ppl/sq km)'].round(0)
     df.drop(columns='Unnamed: 0', inplace=True)
     st.session_state['df'] = df
@@ -117,8 +117,8 @@ def aggs_to_ss():
     dff = st.session_state['dff']
 
     total_pop = dff['Population'].sum()
-    total_pop_under_4 = (dff['Population']*dff['% Aged 0 to 4']).sum()
-    total_pop_under_16 = (dff['Population']*dff['% Aged 0 to 16']).sum()
+    total_pop_under_4 = (dff['Population'] * dff['% Aged 0 to 4']).sum()
+    total_pop_under_16 = (dff['Population'] * dff['% Aged 0 to 16']).sum()
     av_value = dff['Median Value'].mean()
     av_pop_den = dff['Pop Density (ppl/sq km)'].mean()
 
@@ -130,3 +130,4 @@ def aggs_to_ss():
         'av_pop_den':av_pop_den
 
     }
+
