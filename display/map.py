@@ -3,10 +3,24 @@ from folium import GeoJson, Circle
 from streamlit_folium import st_folium
 import streamlit as st
 from utils.db import gdff_to_ss
+from display.text import warning_too_much_data, warning_too_little_data
 from utils.clustering import cluster_labels_to_ss,cluster_aggs_to_ss
 from utils.gdf_processing import clean_gdf_to_ss
 from utils.df_processing import aggs_to_ss
 import geopandas as gdf
+
+
+def display_map():
+    if len(st.session_state['dff']) < 2:
+        warning_too_little_data()
+    else:
+        with st.form(key='map_container'):
+            if 'dff' in st.session_state and len(st.session_state['dff']) > 3000:
+                warning_too_much_data()
+                submit_button = st.form_submit_button(label='We need fewer Data Zones', disabled=True)
+            else:
+                map_pipeline()
+                submit_button = st.form_submit_button(label='Map again')
 
 def map_placeholder():
     st.write("🗺Your awesome map will go here!")

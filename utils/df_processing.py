@@ -37,7 +37,7 @@ def mm_to_ss():
     st.session_state['mins_maxs_calculated'] = True
 
 #Filter dataframe based on slicers
-def filters_to_ss():
+def filters_strings_to_ss():
     """
     Create filter query strings based on session state slider values and store them in the session state.
 

@@ -1,0 +1,7 @@
+[theme]
+base="light"
+[page]
+title = "Find Your Market"
+icon = "🗺️"
+layout = "centered"
+sidebar_state = "auto"

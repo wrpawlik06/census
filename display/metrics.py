@@ -5,13 +5,25 @@ def cards_placeholder():
 
     
 def display_metrics():
-    # Creating a list containing 4 empty columns
-    cols = st.columns(len(st.session_state['matches']))
+
+
+    # Work out the % of the total
+    my_value = len(st.session_state['dff'] )/ len(st.session_state['df'])
+    my_value_percentage = "{:.1%}".format(my_value)
+    st.metric(label="Zones Matching all filters", value=len(st.session_state['dff']) )
+    # Work out the % of the total
+    st.metric(label="Zones Matching all filters", value=my_value_percentage)
 
     # Initializing a counter
     index = 0
-
-    # For metric, we assign it to a column
+        # Better labels
+    labels = {
+        'house_price_matches': 'House Price',
+        'children_16_prct_matches': 'Children <16%',
+        'children_4_prct_matches': 'Children <4%',
+        'pop_den_matches': 'Pop Density'
+    }
+    # For each match, we display it as a metric
     for key in st.session_state['matches']:
         #TO DO: Better labels!
         my_label = f"Zones Matching {key}"
@@ -21,7 +33,7 @@ def display_metrics():
         my_value_percentage = "{:.1%}".format(my_value)
 
         # Assign a metric to a column
-        cols[index].metric(label=my_label, value=my_value_percentage)
+        st.metric(label=labels[key], value=my_value_percentage)
 
         # Increment counter
         index += 1

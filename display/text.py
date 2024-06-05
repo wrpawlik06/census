@@ -16,16 +16,18 @@ def criteria_matches(df, df_filtered, matches):
     st.write(f"Your combined criteria match {len(df_filtered)} ({int(len(df_filtered)/len(df)*100)}%) of zones.")
 
 def sidebar_header():
-    st.sidebar.image('display/wojtek mini.png', width=100, caption='PLACEHOLDER')
-    st.header("Apply your filters here... ",divider='rainbow')
+    st.header(body="Filter Pane", divider='rainbow')
+    col1, col2 = st.sidebar.columns([1, 5])  # Adjust the width ratio as needed
+    with col1:
+        st.image('display/filter.png', width=25)
+    
+    with col2:
+        st.write("Use these to work the map 👉")
 
-def display_total():
-
-    # Work out the % of the total
-    my_value = len(st.session_state['dff'] )/ len(st.session_state['df'])
-    my_value_percentage = "{:.1%}".format(my_value)
-
-    st.header(divider='rainbow',body=f"{len(st.session_state['dff'])} ({my_value_percentage}) of data zones match ALL of search criteria")
 
 def warning_too_much_data():
     st.warning("Your selection is too large! Max 3000 Data Zones.")
+    
+def warning_too_little_data():
+    st.warning("Your selection is too small! Min 2 Data Zones.")
+
