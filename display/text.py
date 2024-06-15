@@ -1,5 +1,6 @@
 import streamlit as st
-
+def dff_table_header():
+    st.subheader("👇Data zones matching your search criteria ")
 def title_header():
     st.header('🗺 Find Your Market', divider='rainbow')
     st.subheader("Use the sliders below to find your market :sunglasses:")

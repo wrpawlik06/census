@@ -15,16 +15,19 @@ def sliders_to_ss():
 
     # Sending slicer selection to session state
     # Calculate step size as 5% of the maximum value for each slider
-        price_step = 50000
+        price_step = 25000
         children_16_step = 1.0
         children_4_step = 1.0
         density_step = 50
 
         st.session_state['median_price_range'] = st.slider(
             "Median Property Price (£)", 
-            min_value=int(st.session_state['Median Value_min']), 
-            max_value=int(st.session_state['Median Value_max']), 
-            value=(int(st.session_state['Median Value_min']), int(st.session_state['Median Value_max'])), 
+            min_value=0, 
+#            min_value=int(st.session_state['Median Value_min']), 
+            max_value=1000000, 
+            value=(0,1000000), 
+            #max_value=int(st.session_state['Median Value_max']), 
+            #value=(int(st.session_state['Median Value_min']),1000000), 
             step=price_step
         )
         
@@ -46,9 +49,9 @@ def sliders_to_ss():
         
         st.session_state['population_density_range'] = st.slider(
             "Population Density (people per square km)", 
-            min_value=int(st.session_state['Pop Density (ppl/sq km)_min']), 
+            min_value=0, 
             max_value=int(st.session_state['Pop Density (ppl/sq km)_max']), 
-            value=(int(st.session_state['Pop Density (ppl/sq km)_min']), int(st.session_state['Pop Density (ppl/sq km)_max'])), 
+            value=(0, int(st.session_state['Pop Density (ppl/sq km)_max'])), 
             step=density_step
         )
 
