@@ -8,5 +8,4 @@ numpy
 matplotlib
 python-dotenv
 sqlalchemy
-psycopg2
-tmux
+psycopg2-binary
